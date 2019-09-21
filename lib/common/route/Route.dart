@@ -2,16 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jd/main/cart/CartPage.dart';
 import 'package:flutter_jd/main/category/CategoryPage.dart';
+import 'package:flutter_jd/main/common/Tabs.dart';
 import 'package:flutter_jd/main/find/FindPage.dart';
 import 'package:flutter_jd/main/home/HomePage.dart';
 import 'package:flutter_jd/main/me/MePage.dart';
+import 'package:flutter_jd/search/SearchPage.dart';
+
+import 'RoutePath.dart';
 
 final routes = {
-  "/main/home":(context,{arguments}) => HomePage(arguments:arguments),
-  "/main/category":(context) =>CategoryPage(),
-  "/main/find":(context) => FindPage(),
-  "/main/cart":(context) =>CartPage(),
-  "/main/me":(context) =>MePage(),
+  routeRoot:(context)=>Tabs(),
+  routeMainHome:(context,{arguments}) => HomePage(arguments:arguments),
+  routeMainCategory:(context) =>CategoryPage(),
+  routeMainFind:(context) => FindPage(),
+  routeMainCart:(context) =>CartPage(),
+  routeMainMe:(context) =>MePage(),
+  routeSearch:(context) =>SearchPage(),
 };
 
 

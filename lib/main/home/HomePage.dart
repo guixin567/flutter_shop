@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jd/common/route/RoutePath.dart';
 
 class HomePage extends StatefulWidget {
   final arguments;
@@ -16,7 +17,13 @@ class _HomePageState extends State<HomePage> {
     return Container(
        child: Column(
          children: <Widget>[
-           Text("HomePage")
+           RaisedButton(
+             child: Text("Route to Search"),
+             onPressed: (){
+               Navigator.pushNamed(context,routeSearch);
+             },
+           )
+
          ],
        ),
     );
