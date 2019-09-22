@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
         hotProductLayer(),
         SizedBox(height: ScreenHelper.height(10),),
         titleLayer("热门推荐"),
+        bottomProductLayer(),
       ],
     );
   }
@@ -107,6 +108,74 @@ class _HomePageState extends State<HomePage> {
           );
         },
         itemCount: 10,
+      ),
+    );
+  }
+
+  ///底部商品
+  bottomProductLayer() {
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Wrap(
+        spacing: 10,
+        runSpacing: 10,
+        children: <Widget>[
+          bottomProductItem(),
+          bottomProductItem(),
+          bottomProductItem(),
+          bottomProductItem(),
+        ],
+      ),
+    );
+  }
+
+  ///底部商品条目
+  bottomProductItem() {
+    return Container(
+      width: (ScreenHelper.screenWidthDp - 30)/2,
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+       border: Border.all(
+         color: Color.fromRGBO(233, 233, 233, 0.9),
+         width: 1,
+       )
+      ),
+      
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            child: AspectRatio(
+              aspectRatio: 1/1,
+              child: Image.network("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=577169893,2262228506&fm=26&gp=0.jpg",fit: BoxFit.cover,),
+            ),
+          ),
+          SizedBox(height: 5,),
+          Text("2019新款夹克 超帅气大品牌值得购买2019新款夹克 超帅气大品牌值得购买2019新款夹克 超帅气大品牌值得购买",maxLines: 2,overflow: TextOverflow.ellipsis,),
+          SizedBox(height: 5,),
+          Stack(
+            children: <Widget>[
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text("￥188",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                    ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Text("￥488",
+                  style: TextStyle(
+                    color: Colors.black54,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+              ),
+            ],
+          )
+        ]
       ),
     );
   }

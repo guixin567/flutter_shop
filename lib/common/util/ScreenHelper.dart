@@ -19,4 +19,7 @@ class ScreenHelper{
   static double height(double height){
     return ScreenUtil.getInstance().setHeight(height);
   }
+
+  //屏幕宽度
+  static double get screenWidthDp => ScreenUtil.screenWidthDp;
 }
