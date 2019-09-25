@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jd/common/constant/RequestURL.dart';
 import 'package:flutter_jd/common/util/ImageUtil.dart';
@@ -11,11 +12,13 @@ class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClientMixin{
   int leftSelectIndex = 0;
   LeftCategoryEntity leftCategoryEntity;
   RightCategoryEntity rightCategoryEntity;
 
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     super.initState();

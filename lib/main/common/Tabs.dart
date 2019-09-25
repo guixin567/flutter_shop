@@ -5,20 +5,34 @@ import 'package:flutter_jd/main/find/FindPage.dart';
 import 'package:flutter_jd/main/home/HomePage.dart';
 import 'package:flutter_jd/main/me/MePage.dart';
 
-
 class Tabs extends StatefulWidget {
   final int selectIndex;
 
   Tabs({this.selectIndex = 0});
 
   @override
-  _TabsState createState() => _TabsState(selectIndex:selectIndex);
+  _TabsState createState() => _TabsState(selectIndex: selectIndex);
 }
 
 class _TabsState extends State<Tabs> {
   int selectIndex = 0;
-  List mainPages = [HomePage(),CategoryPage(),FindPage(),CartPage(),MePage()];
+  PageController _pageController;
+  List<Widget> mainPages = [
+    HomePage(),
+    CategoryPage(),
+    FindPage(),
+    CartPage(),
+    MePage()
+  ];
+
   _TabsState({this.selectIndex});
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: selectIndex);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,13 +64,19 @@ class _TabsState extends State<Tabs> {
           ),
         ],
         currentIndex: selectIndex,
-        onTap: (index){
-          setState(() {
-            selectIndex = index;
+        onTap: (index) {
+            setState(() {
+//              selectIndex = index;
+            _pageController.jumpToPage(index);
           });
         },
       ),
-      body: mainPages[selectIndex],
+      body: PageView(
+          controller: _pageController,
+          children: mainPages,
+          onPageChanged: (index) {
+            selectIndex = index;
+          }),
     );
   }
 }

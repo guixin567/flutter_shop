@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState(arguments: arguments);
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
   final arguments;
   HomeBannerEntity homeBannerEntity;                                            //banner数据
   ProductEntity hotProductEntity;                                               //热门商品
@@ -27,6 +27,9 @@ class _HomePageState extends State<HomePage> {
 
 
   _HomePageState({this.arguments});
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
