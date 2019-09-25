@@ -5,3 +5,4 @@ final routeMainFind = "/main/find";                                       //首�
 final routeMainCart = "/main/cart";                                       //首页购物车
 final routeMainMe = "/main/me";                                           //首页Me
 final routeSearch = "/search";                                            //搜索
+final routeProductList = "/productlist";                                  //列表页

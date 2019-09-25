@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_jd/common/constant/ArgumentKey.dart';
 import 'package:flutter_jd/common/constant/RequestURL.dart';
+import 'package:flutter_jd/common/route/RoutePath.dart';
 import 'package:flutter_jd/common/util/ImageUtil.dart';
 import 'package:flutter_jd/common/util/ScreenHelper.dart';
 import 'package:flutter_jd/main/category/bean/left_category_entity.dart';
@@ -107,20 +109,25 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
               crossAxisSpacing: 10,
             ),
             itemBuilder: (context, index) {
-              return Container(
-                width: (ScreenHelper.screenWidthDp - 100 - 60) / 3,
-                child: Column(
-                  children: <Widget>[
-                    AspectRatio(
-                      aspectRatio: 1 / 1,
-                      child: Image.network(
-                          ImageUtil.getImageUrl(rightCategoryEntity.result[index].pic)),
-                    ),
-                    Container(
-                      height: ScreenHelper.height(32),
-                      child: Text(rightCategoryEntity.result[index].title),
-                    )
-                  ],
+              return InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, routeProductList,arguments: {ArgumentKey.goodsId:"${rightCategoryEntity.result[index].pid}"});
+                },
+                child: Container(
+                  width: (ScreenHelper.screenWidthDp - 100 - 60) / 3,
+                  child: Column(
+                    children: <Widget>[
+                      AspectRatio(
+                        aspectRatio: 1 / 1,
+                        child: Image.network(
+                            ImageUtil.getImageUrl(rightCategoryEntity.result[index].pic)),
+                      ),
+                      Container(
+                        height: ScreenHelper.height(32),
+                        child: Text(rightCategoryEntity.result[index].title),
+                      )
+                    ],
+                  ),
                 ),
               );
             }),
