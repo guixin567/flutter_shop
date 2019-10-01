@@ -1,6 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jd/common/constant/ArgumentKey.dart';
+import 'package:flutter_jd/common/constant/RequestURL.dart';
+import 'package:flutter_jd/common/util/ImageUtil.dart';
 import 'package:flutter_jd/common/util/ScreenHelper.dart';
+import 'package:flutter_jd/common/widget/LodingMoreView.dart';
+import 'package:flutter_jd/main/home/bean/product_entity.dart';
 
 class ProductListPage extends StatefulWidget {
   final arguments;
@@ -14,12 +19,27 @@ class ProductListPage extends StatefulWidget {
 
 class _ProductListPageState extends State<ProductListPage> {
   final arguments;
+  var _page = 1;                                                 //页面
+  var _pageSize = "5";                                           //一页数据
+  ProductEntity _productEntity;
+  List<ProductResult> _productList = [];
+  ScrollController _controller = ScrollController();
+  var _isRequesting = false;                                     //正在请求
+  var _hasMore = false;
   _ProductListPageState({this.arguments});
   final GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
-    var goodsId = arguments["${ArgumentKey.goodsId}"];
+    var cateId = arguments["${ArgumentKey.cateId}"];
+    _getProductList(cateId);
+    _controller.addListener((){
+      if(_controller.position.pixels == _controller.position.maxScrollExtent){
+        if(_hasMore){
+          _getProductList(cateId);
+        }
+      }
+    });
   }
 
   @override
@@ -106,77 +126,110 @@ class _ProductListPageState extends State<ProductListPage> {
         );
   }
 
-  ///无Taab列表
-  Container _productListWidget() {
-    return Container(
-      margin: EdgeInsets.only(top: 50),
-      child: Padding(
-        padding: EdgeInsets.only(left: 10, right: 10),
-        child: ListView.builder(
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return Column(
-              children: <Widget>[
-                Container(
-                  height: ScreenHelper.screenWidthDp / 4 + 20,
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: ScreenHelper.screenWidthDp / 4,
-                        child: AspectRatio(
-                          aspectRatio: 1 / 1,
-                          child: Image.network(
-                            "http://e.hiphotos.baidu.com/image/h%3D300/sign=a9e671b9a551f3dedcb2bf64a4eff0ec/4610b912c8fcc3cef70d70409845d688d53f20f7.jpg",
-                            fit: BoxFit.cover,
+  ///无Tab列表
+   Widget _productListWidget() {
+     if(_productEntity == null || _productEntity.result == null ||_productList.length == 0){
+       return LoadingMoreView();
+    }else{
+      return  Container(
+        margin: EdgeInsets.only(top: 50),
+        child: Padding(
+          padding: EdgeInsets.only(left: 10, right: 10),
+          child: ListView.builder(
+            controller: _controller,
+            itemCount: _productList.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: <Widget>[
+                  Container(
+                    height: ScreenHelper.screenWidthDp / 4 + 20,
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: ScreenHelper.screenWidthDp / 4,
+                          child: AspectRatio(
+                            aspectRatio: 1 / 1,
+                            child: Image.network(
+                              ImageUtil.getImageUrl(_productList[index].pic),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.only(left: 10),
-                          height: ScreenHelper.screenWidthDp / 4,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "联想小新pro13,京东首发联想小新pro13,京小新pro13,京东首发联想东首发联想小新pro13,京东首发",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Container(
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      child: Text("4G"),
-                                      decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(4))),
-                                      padding: EdgeInsets.only(
-                                          left: 5, right: 5, top: 0, bottom: 0),
-                                      margin: EdgeInsets.only(right: 5),
-                                    )
-                                  ],
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.only(left: 10),
+                            height: ScreenHelper.screenWidthDp / 4,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  _productList[index].title,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                              Text("6599.00￥")
-                            ],
+                                Container(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: Text("4G"),
+                                        decoration: BoxDecoration(
+                                            border:
+                                            Border.all(color: Colors.grey),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4))),
+                                        padding: EdgeInsets.only(
+                                            left: 5, right: 5, top: 0, bottom: 0),
+                                        margin: EdgeInsets.only(right: 5),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Text("6599.00￥")
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Divider(
-                  height: 1,
-                ),
-              ],
-            );
-          },
+                  Divider(
+                    height: 1,
+                  ),
+                  showMoreWidget(index),
+                ],
+              );
+            },
+          ),
         ),
-      ),
-    );
+      );
+    }
+  }
+  //显示加载更多
+  StatelessWidget showMoreWidget(int index){
+    if(_hasMore){
+      return index == _productList.length -1 ? LoadingMoreView(): Text("");
+    }else{
+      return index == _productList.length -1 ? Text("加载完了..."): Text("");
+    }
+  }
+
+  void _getProductList(goodsId) async{
+    if(_isRequesting) return;
+    _isRequesting = true;
+    var url = "${productListUrl}cid=$goodsId&page=$_page&pageSize=$_pageSize";
+    print('$url');
+    var response = await Dio().get(url);
+    setState(() {
+      _productEntity = ProductEntity.fromJson(response.data);
+      _productList.addAll(_productEntity.result);
+      if(_productEntity.result.length>0){
+        _page++;
+        _hasMore = true;
+      }else{
+        _hasMore = false;
+      }
+      _isRequesting = false;
+    });
   }
 }

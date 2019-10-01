@@ -4,3 +4,4 @@ final youMayLikeUrl = "${rootUrl}api/plist?is_hot=1";                           
 final hotRecommendUrl = "${rootUrl}api/plist?is_best=1";                        //首页热门推荐
 final leftCategoryUrl = "${rootUrl}api/pcate";                                  //左边一级分类
 final rightCategoryUrl = "${rootUrl}api/pcate?pid=";                            //右边二级分类
+final productListUrl = "${rootUrl}api/plist?";                                  //列表数据

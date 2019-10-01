@@ -111,7 +111,7 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, routeProductList,arguments: {ArgumentKey.goodsId:"${rightCategoryEntity.result[index].pid}"});
+                  Navigator.pushNamed(context, routeProductList,arguments: {ArgumentKey.cateId:"${rightCategoryEntity.result[index].sId}"});
                 },
                 child: Container(
                   width: (ScreenHelper.screenWidthDp - 100 - 60) / 3,
