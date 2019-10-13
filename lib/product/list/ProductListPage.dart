@@ -20,17 +20,19 @@ class ProductListPage extends StatefulWidget {
 
 class _ProductListPageState extends State<ProductListPage> {
   final arguments;
-  var _page = 1; //页面
-  var _pageSize = "5"; //一页数据
+  var _page = 1;                                                                      //页面
+  var _pageSize = "5";                                                                //一页数据
   ProductEntity _productEntity;
   List<ProductResult> _productList = [];
   ScrollController _controller = ScrollController();
-  var _isRequesting = false; //正在请求
+  var _isRequesting = false;                                                          //正在请求
   final GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
-  var _hasMore = false; //是否加载更多
-  var _selectTabId = 1; //Tab选中的索引ID
-  var _sort = ""; //接口里面排序
+  var _hasMore = false;                                                               //是否加载更多
+  var _selectTabId = 1;                                                               //Tab选中的索引ID
+  var _sort = "";                                                                     //接口里面排序
   var _cateId = "";
+  var _searchWord = "";
+  var _searchController = TextEditingController();
 
   var headerTabList = [
     {
@@ -62,7 +64,9 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   void initState() {
     super.initState();
-    _cateId = arguments["${ArgumentKey.cateId}"];
+    _cateId = arguments["${ArgumentKey.cateId}"]??"";
+    _searchWord = arguments["${ArgumentKey.searchWord}"]??"";
+    _searchController.text = _searchWord;
     _getProductList();
     _controller.addListener(() {
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
@@ -77,10 +81,7 @@ class _ProductListPageState extends State<ProductListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: globalKey,
-      appBar: AppBar(
-        title: Text("Product List"),
-        actions: [Text("")],
-      ),
+      appBar: initAppBar(),
       endDrawer: Drawer(
         child: Text("Test Drawer"),
       ),
@@ -90,6 +91,48 @@ class _ProductListPageState extends State<ProductListPage> {
           _productHeaderWidget(),
         ],
       ),
+    );
+  }
+
+  AppBar initAppBar() {
+    if(_searchWord.isEmpty){
+      return AppBar(
+        title: Text("Product List"),
+        actions: [Text("")],
+      );
+    }
+    return AppBar(
+      title: Container(
+        height: ScreenHelper.height(76),
+        padding: EdgeInsets.only(left: 15),
+        decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20)
+        ),
+        child: TextField(
+          autofocus: false,
+          controller: _searchController,
+          onChanged: (value){
+          },
+          decoration: InputDecoration(
+              border: InputBorder.none
+          ),
+        ),
+      ),
+      actions: <Widget>[
+        InkWell(
+          child: Container(
+            padding: EdgeInsets.only(left:20,right: 20),
+            alignment: Alignment.center,
+            child: Text("搜索"),
+          ),
+          onTap: (){
+            if(_searchController.text.isNotEmpty)  _subHeaderChange(1);
+
+          },
+
+        )
+      ],
     );
   }
 
@@ -130,17 +173,7 @@ class _ProductListPageState extends State<ProductListPage> {
                     )),
                 onTap: () {
                   setState(() {
-                    _selectTabId = tab["id"];
-                    if (tab["id"] != 4) {
-                      _sort = "${tab["fileds"]}_${tab["sort"]}";
-                      _page = 1; //重置页码
-                      tab['sort'] = -1 * tab['sort']; //点击取反
-                      _productList = []; //重置数据
-                      _controller.jumpTo(0); //回到顶部
-                      _getProductList();
-                    } else {
-                      globalKey.currentState.openEndDrawer();
-                    }
+                    _subHeaderChange(tab["id"]);
                   });
                 },
               ),
@@ -149,6 +182,21 @@ class _ProductListPageState extends State<ProductListPage> {
         ),
       ),
     );
+  }
+
+  void _subHeaderChange(id) {
+      _selectTabId = id;
+      var tab = headerTabList[id-1];
+    if (id != 4) {
+      _sort = "${tab["fileds"]}_${tab["sort"]}";
+      _page = 1; //重置页码
+      tab['sort'] = -1 * tab['sort']; //点击取反
+      _productList = []; //重置数据
+      _controller.jumpTo(0); //回到顶部
+      _getProductList();
+    } else {
+      globalKey.currentState.openEndDrawer();
+    }
   }
 
   ///无Tab列表
@@ -249,7 +297,7 @@ class _ProductListPageState extends State<ProductListPage> {
     if (_isRequesting) return;
     _isRequesting = true;
     var url =
-        "${productListUrl}cid=$_cateId&page=$_page&pageSize=$_pageSize&sort=$_sort";
+        "${productListUrl}cid=$_cateId&search=${_searchController.text}&page=$_page&pageSize=$_pageSize&sort=$_sort";
     Log.d('$url');
     var response = await Dio().get(url);
     setState(() {

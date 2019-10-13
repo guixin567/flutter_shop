@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_jd/common/constant/ArgumentKey.dart';
+import 'package:flutter_jd/common/route/RoutePath.dart';
 import 'package:flutter_jd/common/util/ScreenHelper.dart';
 
 class SearchPage extends StatefulWidget {
@@ -8,6 +10,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  var searchWord;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +24,9 @@ class _SearchPageState extends State<SearchPage> {
           ),
           child: TextField(
             autofocus: false,
-
+            onChanged: (value){
+              searchWord = value;
+            },
             decoration: InputDecoration(
                 border: InputBorder.none
             ),
@@ -34,7 +39,9 @@ class _SearchPageState extends State<SearchPage> {
               alignment: Alignment.center,
               child: Text("搜索"),
             ),
-            onTap: (){},
+            onTap: (){
+              Navigator.pushReplacementNamed(context, routeProductList,arguments:{ArgumentKey.searchWord:searchWord});
+            },
 
           )
         ],
