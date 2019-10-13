@@ -28,6 +28,7 @@ class _ProductListPageState extends State<ProductListPage> {
   var _isRequesting = false;                                                          //正在请求
   final GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
   var _hasMore = false;                                                               //是否加载更多
+  var _hasNoData = false;                                                             //是否为空数据
   var _selectTabId = 1;                                                               //Tab选中的索引ID
   var _sort = "";                                                                     //接口里面排序
   var _cateId = "";
@@ -204,6 +205,7 @@ class _ProductListPageState extends State<ProductListPage> {
     if (_productEntity == null ||
         _productEntity.result == null ||
         _productList.length == 0) {
+      if(_hasNoData) return Center(child: Text("空数据"),);
       return LoadingMoreView();
     } else {
       return Container(
@@ -309,6 +311,7 @@ class _ProductListPageState extends State<ProductListPage> {
       } else {
         _hasMore = false;
       }
+      _hasNoData = _productList.isEmpty;
       _isRequesting = false;
     });
   }
