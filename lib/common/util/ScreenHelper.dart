@@ -22,4 +22,9 @@ class ScreenHelper{
 
   //屏幕宽度
   static double get screenWidthDp => ScreenUtil.screenWidthDp;
+
+  //设置文字
+  static double size(double size){
+    return ScreenUtil.getInstance().setSp(size);
+  }
 }

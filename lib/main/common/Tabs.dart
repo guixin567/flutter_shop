@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jd/common/route/RoutePath.dart';
+import 'package:flutter_jd/common/util/ScreenHelper.dart';
 import 'package:flutter_jd/main/cart/CartPage.dart';
 import 'package:flutter_jd/main/category/CategoryPage.dart';
 import 'package:flutter_jd/main/find/FindPage.dart';
@@ -35,12 +37,12 @@ class _TabsState extends State<Tabs> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenHelper.init(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("JD"),
-      ),
+      appBar: generateTabAppBar(context,selectIndex),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.red,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -66,8 +68,8 @@ class _TabsState extends State<Tabs> {
         currentIndex: selectIndex,
         onTap: (index) {
             setState(() {
-//              selectIndex = index;
-            _pageController.jumpToPage(index);
+              selectIndex = index;
+             _pageController.jumpToPage(index);
           });
         },
       ),
@@ -75,8 +77,63 @@ class _TabsState extends State<Tabs> {
           controller: _pageController,
           children: mainPages,
           onPageChanged: (index) {
-            selectIndex = index;
-          }),
+            setState(() {
+              selectIndex = index;
+            });
+          },
+        physics: NeverScrollableScrollPhysics(),
+          ),
     );
+  }
+
+  AppBar generateTabAppBar(BuildContext context, int selectIndex) {
+    if(4 != selectIndex){
+      return AppBar(
+        title: InkWell(
+          onTap: (){
+            Navigator.pushNamed(context,routeSearch);
+          },
+          child: Container(
+            padding: EdgeInsets.only(left: 10,right: 10),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            height: ScreenHelper.height(76),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.search),
+                Text("Search")
+              ],
+            ),
+          ),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.settings_overscan),
+          iconSize: 28,
+          color: Colors.black12,
+          onPressed: (){
+
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.message),
+            iconSize: 28,
+            color: Colors.black12,
+            onPressed: (){
+
+            },
+          )
+        ],
+      );
+    }else{
+      return AppBar(
+        title: Text("用户中心",style: TextStyle(
+          fontSize: ScreenHelper.size(34)
+        ),),
+      );
+    }
+
   }
 }
