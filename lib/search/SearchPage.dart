@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jd/common/constant/ArgumentKey.dart';
 import 'package:flutter_jd/common/route/RoutePath.dart';
 import 'package:flutter_jd/common/util/ScreenHelper.dart';
+import 'package:flutter_jd/search/service/SearchService.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -41,6 +42,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             onTap: (){
               Navigator.pushReplacementNamed(context, routeProductList,arguments:{ArgumentKey.searchWord:searchWord});
+              if(searchWord.isNotEmpty) SearchService.setSearchData(searchWord);
             },
 
           )
