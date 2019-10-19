@@ -7,6 +7,7 @@ import 'package:flutter_jd/common/util/Log.dart';
 import 'package:flutter_jd/common/util/ScreenHelper.dart';
 import 'package:flutter_jd/common/widget/LodingMoreView.dart';
 import 'package:flutter_jd/main/home/bean/product_entity.dart';
+import 'package:flutter_jd/search/service/SearchService.dart';
 
 class ProductListPage extends StatefulWidget {
   final arguments;
@@ -127,9 +128,9 @@ class _ProductListPageState extends State<ProductListPage> {
             alignment: Alignment.center,
             child: Text("搜索"),
           ),
-          onTap: (){
+          onTap: ()async{
+            await SearchService.setSearchData(_searchController.text);
             if(_searchController.text.isNotEmpty)  _subHeaderChange(1);
-
           },
 
         )
