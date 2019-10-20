@@ -6,3 +6,4 @@ final routeMainCart = "/main/cart";                                       //首�
 final routeMainMe = "/main/me";                                           //首页Me
 final routeSearch = "/search";                                            //搜索
 final routeProductList = "/productlist";                                  //列表页
+final routeProductDetail = "/productdetail";                                  //商品详情

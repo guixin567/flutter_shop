@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_jd/common/constant/ArgumentKey.dart';
 import 'package:flutter_jd/common/constant/RequestURL.dart';
+import 'package:flutter_jd/common/route/RoutePath.dart';
 import 'package:flutter_jd/common/util/ImageUtil.dart';
 import 'package:flutter_jd/common/util/ScreenHelper.dart';
 import 'package:flutter_jd/main/home/bean/home_banner_entity.dart';
@@ -143,41 +145,46 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
             )
         ),
 
-        child: Column(
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                child: AspectRatio(
-                  aspectRatio: 1/1,
-                  child: Image.network(ImageUtil.getImageUrl(product.pic),fit: BoxFit.cover,),
+        child: InkWell(
+          onTap: (){
+            Navigator.pushNamed(context, routeProductDetail,arguments: {ArgumentKey.goodsId:"${product.sId}"});
+          },
+          child: Column(
+              children: <Widget>[
+                Container(
+                  width: double.infinity,
+                  child: AspectRatio(
+                    aspectRatio: 1/1,
+                    child: Image.network(ImageUtil.getImageUrl(product.pic),fit: BoxFit.cover,),
+                  ),
                 ),
-              ),
-              SizedBox(height: 5,),
-              Text(product.title,maxLines: 2,overflow: TextOverflow.ellipsis,),
-              SizedBox(height: 5,),
-              Stack(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("￥188",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 16,
+                SizedBox(height: 5,),
+                Text(product.title,maxLines: 2,overflow: TextOverflow.ellipsis,),
+                SizedBox(height: 5,),
+                Stack(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("￥188",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Text("￥488",
-                      style: TextStyle(
-                        color: Colors.black54,
-                        decoration: TextDecoration.lineThrough,
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Text("￥488",
+                        style: TextStyle(
+                          color: Colors.black54,
+                          decoration: TextDecoration.lineThrough,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              )
-            ]
+                  ],
+                )
+              ]
+          ),
         ),
       );
       productWidgets.add(container);
