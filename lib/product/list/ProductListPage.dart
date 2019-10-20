@@ -6,6 +6,7 @@ import 'package:flutter_jd/common/util/ImageUtil.dart';
 import 'package:flutter_jd/common/util/Log.dart';
 import 'package:flutter_jd/common/util/ScreenHelper.dart';
 import 'package:flutter_jd/common/widget/LodingMoreView.dart';
+import 'package:flutter_jd/common/widget/TagText.dart';
 import 'package:flutter_jd/main/home/bean/product_entity.dart';
 import 'package:flutter_jd/search/service/SearchService.dart';
 
@@ -249,20 +250,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                 Container(
                                   child: Row(
                                     children: <Widget>[
-                                      Container(
-                                        child: Text("4G"),
-                                        decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: Colors.grey),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(4))),
-                                        padding: EdgeInsets.only(
-                                            left: 5,
-                                            right: 5,
-                                            top: 0,
-                                            bottom: 0),
-                                        margin: EdgeInsets.only(right: 5),
-                                      )
+                                      new TagText("4G")
                                     ],
                                   ),
                                 ),
