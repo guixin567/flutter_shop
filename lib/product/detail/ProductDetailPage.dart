@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jd/common/util/ScreenHelper.dart';
+import 'package:flutter_jd/common/widget/TagText.dart';
 import 'package:flutter_jd/product/detail/tabs/DetailContent.dart';
 import 'package:flutter_jd/product/detail/tabs/ProductContent.dart';
 import 'package:flutter_jd/product/detail/tabs/ReviewContent.dart';
@@ -67,7 +68,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               width: ScreenHelper.screenWidthDp,
               bottom: 0,
               child: Container(
-                padding: EdgeInsets.only(left: 10,right: 10),
+                padding: EdgeInsets.only(left: 10, right: 10),
                 decoration: BoxDecoration(
                     border: Border(
                         top: BorderSide(
@@ -83,18 +84,81 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(left:16.0,right: 8.0),
+                        padding: const EdgeInsets.only(left: 16.0, right: 8.0),
                         child: FlatButton(
                           color: Colors.red,
                           textColor: Colors.white,
                           child: Text("加入购物车"),
-                          onPressed: () {},
+                          onPressed: () {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    padding: EdgeInsets.all(4),
+                                    height: ScreenHelper.height(500),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Column(
+                                          children: <Widget>[
+                                            Row(
+                                              children: <Widget>[
+                                                Text("颜色："),
+                                                Expanded(
+                                                  child: Wrap(
+                                                    children: <Widget>[
+                                                      TagText("红色",solidColor: Colors.red,textColor: Colors.white,),
+                                                      TagText("白色"),
+                                                      TagText("蓝色"),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        Positioned(
+                                          child: Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: RaisedButton(
+                                                    child: Text("加入购物车"),
+                                                    onPressed: (){},
+                                                    color: Colors.red,
+                                                    textColor: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: RaisedButton(
+                                                    child: Text("立即购买"),
+                                                    onPressed: (){},
+                                                    color: Colors.red,
+                                                    textColor: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+
+                                            ],
+
+                                          ),
+                                          bottom: 10,
+                                          width: ScreenHelper.screenWidthDp,
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                });
+                          },
                         ),
                       ),
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(left:8.0,right: 8.0),
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                         child: FlatButton(
                           color: Colors.red,
                           textColor: Colors.white,

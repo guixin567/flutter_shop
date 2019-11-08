@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 
 class TagText extends StatelessWidget {
   final txt;
+  final solidColor;
+  final textColor;
   const TagText(this.txt,{
-    Key key,
+    Key key,this.solidColor,this.textColor
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text(txt),
+      child: Text(txt,style: TextStyle(color: textColor ?? Colors.black),),
       decoration: BoxDecoration(
+        color: solidColor?? Colors.white,
           border:
               Border.all(color: Colors.grey),
           borderRadius: BorderRadius.all(
